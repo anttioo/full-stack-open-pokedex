@@ -27,7 +27,8 @@ jobs:
         run: npx playwright test
       - name: Deploy to Render
         run: |
-          curl --request GET \
+          curl --request POST \
             --url 'https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys?limit=20' \
             -H 'Accept: application/json' \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            --data '{ "clearCache": "clear" }'
