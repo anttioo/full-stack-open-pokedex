@@ -36,3 +36,16 @@ jobs:
             -H 'Accept: application/json' \
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
             --data '{ "clearCache": "clear" }'
+  tag_release:
+    needs: [ simple_deployment_pipeline ]
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.71.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+          WITH_V: true
